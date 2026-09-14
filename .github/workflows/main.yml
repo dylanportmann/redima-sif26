@@ -1,10 +1,16 @@
-name: Import REDIMA and deploy Pages
+name: Deploy REDIMA to GitHub Pages
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'public/**'
+      - '.github/workflows/main.yml'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -24,45 +30,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Import REDIMA
-        run: |
-          rm -rf site
-          mkdir site
-
-          BASE="https://redima-sif26.netlify.app"
-
-          for FILE in index.html app.js styles.css planning.js original-data.json
-          do
-            curl --fail --location --silent --show-error \
-              "$BASE/$FILE" \
-              --output "site/$FILE"
-          done
-
-          echo "redima.familleportmann.ch" > site/CNAME
-
-      - name: Save REDIMA files in GitHub
-        run: |
-          rm -rf public
-          mkdir public
-          cp -R site/. public/
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add public
-
-          if ! git diff --cached --quiet; then
-            git commit -m "Import REDIMA site"
-            git push
-          fi
-
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: site
+          path: public
 
       - name: Deploy to GitHub Pages
         id: deployment
