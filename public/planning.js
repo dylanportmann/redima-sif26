@@ -27,6 +27,18 @@ function resolvePlanning(events, changes = {}) {
   base.push({id:'manual-release-171', title:'Licenciement anticipé',
     start:720, end:5760, people:['171'], post:null,
     source:'Modification demandée', exact:true});
+
+  // Remplacements depuis le Pool-pers pour les postes laissés vacants.
+  base.push({id:'pool-replacement-10-144', title:'POSTE 10',
+    start:3750, end:3840, people:['144'], post:'10',
+    source:'Remplacement Pool-pers', exact:true, override:true});
+  base.push({id:'pool-replacement-40-159', title:'POSTE 40',
+    start:3330, end:3480, people:['159'], post:'40',
+    source:'Remplacement Pool-pers', exact:true, override:true});
+  base.push({id:'pool-replacement-33-189', title:'POSTE 33',
+    start:4830, end:4920, people:['189'], post:'33',
+    source:'Remplacement Pool-pers', exact:true, override:true});
+
   for (const change of changes.postAssignments || []) {
     const slots = new Map(base.filter(e => e.post === change.post).map(e => [`${e.start}-${e.end}`,e]));
     for (const e of slots.values()) base.push({...e,id:`manual-post-${change.post}-${e.start}`,people:change.people,override:true,source:'Modification demandée'});
