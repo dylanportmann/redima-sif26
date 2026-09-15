@@ -11,6 +11,15 @@ function resolvePlanning(events, changes = {}) {
   const releaseIds = changes.earlyRelease?.people || [];
   const base = events.map(e => ({...e, people: [...e.people]}));
 
+  // Garde du soir 22:00-06:00 pour les nuits mercredi->jeudi et jeudi->vendredi.
+  const guardPeople=['108','124','114','145','146','147','150','152','151'];
+  base.push({id:'manual-guard-wed-thu', title:'GARDE',
+    start:2760, end:3240, people:[...guardPeople], post:null,
+    source:'Modification demandée', exact:true, override:true});
+  base.push({id:'manual-guard-thu-fri', title:'GARDE',
+    start:4200, end:4680, people:[...guardPeople], post:null,
+    source:'Modification demandée', exact:true, override:true});
+
   // Poste 32 : Blanc Alan (108) retourne au Pool-pers, Roland Dylan (134) prend sa place.
   for (const e of base) {
     if (e.post === '32' && e.start === 3330 && e.end === 3900 && e.people.includes('108')) {
