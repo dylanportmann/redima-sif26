@@ -19,7 +19,7 @@ const POST_MAP_CENTERS={
   '46':[2613382.44,1179199.61,14.2]
 };
 const REDIMA_KML='https://public.geo.admin.ch/api/kml/files/SReCDBZxTTmpzsji2j5nBA';
-function postMapUrl(id){const m=POST_MAP_CENTERS[String(id)];if(!m)return 'https://s.geo.admin.ch/9mmk3e9qtom8';return 'https://map.geo.admin.ch/#/map?lang=fr&center='+m[0]+','+m[1]+'&z='+m[2]+'&bgLayer=ch.swisstopo.swissimage&topic=ech&layers=KML%7C'+REDIMA_KML+'&featureInfo=default';}
+function postMapUrl(id){const key=String(id),m=POST_MAP_CENTERS[key];if(!m)return 'https://s.geo.admin.ch/9mmk3e9qtom8';if(key==='32')return 'https://map.geo.admin.ch/#/map?lang=fr&center=2613295.67,1178955.07&z=11.8&bgLayer=ch.swisstopo.swissimage&topic=ech&layers=KML%7C'+REDIMA_KML+'&crosshair=marker,2613161.99,1178446.16&featureInfo=default';return 'https://map.geo.admin.ch/#/map?lang=fr&center='+m[0]+','+m[1]+'&z='+m[2]+'&bgLayer=ch.swisstopo.swissimage&topic=ech&layers=KML%7C'+REDIMA_KML+'&featureInfo=default';}
 let data,mode='people',selected='95',day='all',query='',kind='all';
 let vehicles=[];
 const person=id=>data.people.find(p=>p.id===id);
