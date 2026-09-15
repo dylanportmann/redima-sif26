@@ -28,16 +28,45 @@ function resolvePlanning(events, changes = {}) {
     start:720, end:5760, people:['171'], post:null,
     source:'Modification demandée', exact:true});
 
-  // Remplacements depuis le Pool-pers pour les postes laissés vacants.
-  base.push({id:'pool-replacement-10-144', title:'POSTE 10',
+  // Remplacements depuis le Pool-pers : reprendre toute la séquence de tâches du poste.
+  // Delacuisine -> Monnard Stan (ID 144), poste 10.
+  base.push({id:'pool-replacement-10-144-palettes', title:'Palettes',
+    start:3690, end:3720, people:['144'], post:null,
+    source:'Remplacement Pool-pers - poste 10', exact:true, override:true});
+  base.push({id:'pool-replacement-10-144-pret', title:'Prêt',
+    start:3720, end:3750, people:['144'], post:null,
+    source:'Remplacement Pool-pers - poste 10', exact:true, override:true});
+  base.push({id:'pool-replacement-10-144-poste', title:'POSTE 10',
     start:3750, end:3840, people:['144'], post:'10',
-    source:'Remplacement Pool-pers', exact:true, override:true});
-  base.push({id:'pool-replacement-40-159', title:'POSTE 40',
+    source:'Remplacement Pool-pers - poste 10', exact:true, override:true});
+
+  // Oggier -> Avdéev Ivan (ID 159), poste 40.
+  base.push({id:'pool-replacement-40-159-palettes', title:'Palettes',
+    start:3270, end:3300, people:['159'], post:null,
+    source:'Remplacement Pool-pers - poste 40', exact:true, override:true});
+  base.push({id:'pool-replacement-40-159-pret', title:'Prêt',
+    start:3300, end:3330, people:['159'], post:null,
+    source:'Remplacement Pool-pers - poste 40', exact:true, override:true});
+  base.push({id:'pool-replacement-40-159-poste', title:'POSTE 40',
     start:3330, end:3480, people:['159'], post:'40',
-    source:'Remplacement Pool-pers', exact:true, override:true});
-  base.push({id:'pool-replacement-33-189', title:'POSTE 33',
+    source:'Remplacement Pool-pers - poste 40', exact:true, override:true});
+  base.push({id:'pool-replacement-40-159-charg', title:'Charg.',
+    start:3480, end:3510, people:['159'], post:null,
+    source:'Remplacement Pool-pers - poste 40', exact:true, override:true});
+  base.push({id:'pool-replacement-40-159-sgl', title:'SGL',
+    start:3540, end:3600, people:['159'], post:null,
+    source:'Remplacement Pool-pers - poste 40', exact:true, override:true});
+
+  // Giroud -> Hofer Jérome-Luca (ID 189), poste 33.
+  base.push({id:'pool-replacement-33-189-palettes', title:'Palettes',
+    start:4770, end:4800, people:['189'], post:null,
+    source:'Remplacement Pool-pers - poste 33', exact:true, override:true});
+  base.push({id:'pool-replacement-33-189-pret', title:'Prêt',
+    start:4800, end:4830, people:['189'], post:null,
+    source:'Remplacement Pool-pers - poste 33', exact:true, override:true});
+  base.push({id:'pool-replacement-33-189-poste', title:'POSTE 33',
     start:4830, end:4920, people:['189'], post:'33',
-    source:'Remplacement Pool-pers', exact:true, override:true});
+    source:'Remplacement Pool-pers - poste 33', exact:true, override:true});
 
   for (const change of changes.postAssignments || []) {
     const slots = new Map(base.filter(e => e.post === change.post).map(e => [`${e.start}-${e.end}`,e]));
