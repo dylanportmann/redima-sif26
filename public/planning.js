@@ -19,6 +19,10 @@ function resolvePlanning(events, changes = {}) {
   base.push({id:'manual-release-143', title:'Licenciement anticipé',
     start:0, end:5760, people:['143'], post:null,
     source:'Modification demandée', exact:true});
+  // Delacuisine Noa Pascal (ID 139): licenciement dès mardi 15.09.2026 12:00.
+  base.push({id:'manual-release-139', title:'Licenciement anticipé',
+    start:720, end:5760, people:['139'], post:null,
+    source:'Modification demandée', exact:true});
   for (const change of changes.postAssignments || []) {
     const slots = new Map(base.filter(e => e.post === change.post).map(e => [`${e.start}-${e.end}`,e]));
     for (const e of slots.values()) base.push({...e,id:`manual-post-${change.post}-${e.start}`,people:change.people,override:true,source:'Modification demandée'});
