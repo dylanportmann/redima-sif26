@@ -10,6 +10,16 @@ function planningPriority(event) {
 function resolvePlanning(events, changes = {}) {
   const releaseIds = changes.earlyRelease?.people || [];
   const base = events.map(e => ({...e, people: [...e.people]}));
+
+  // Poste 32 : Blanc Alan (108) retourne au Pool-pers, Roland Dylan (134) prend sa place.
+  for (const e of base) {
+    if (e.post === '32' && e.start === 3330 && e.end === 3900 && e.people.includes('108')) {
+      e.people = e.people.map(id => id === '108' ? '134' : id);
+    }
+    if (e.title === 'Pool-pers Halle L' && e.start === 3330 && e.end === 3900 && e.people.includes('134')) {
+      e.people = e.people.map(id => id === '134' ? '108' : id);
+    }
+  }
   // Replace existing early-release timings for the explicitly named people.
   for (const e of base) if (planningPriority(e) === 3) e.people = e.people.filter(id => !releaseIds.includes(id));
   if (releaseIds.length) base.push({id:'manual-release', title:'Licenciement anticipé',
