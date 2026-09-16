@@ -31,15 +31,23 @@ function postSequence(e){
   const common=x=>Array.isArray(x.people)&&x.people.some(id=>e.people.includes(id));
   const pret=data.events.filter(x=>x.title==='Prêt'&&x.end===e.start&&common(x)).sort((a,b)=>b.start-a.start)[0]||null;
   const palette=pret?data.events.filter(x=>x.title==='Palettes'&&x.end===pret.start&&common(x)&&x.people.some(id=>pret.people.includes(id))).sort((a,b)=>b.start-a.start)[0]||null:null;
-  return {start:palette?.start??pret?.start??e.start,palette,pret};
+  const prep=(!palette&&!pret)?data.events.filter(x=>x.end===e.start&&common(x)&&/^Det\s/i.test(x.title)).sort((a,b)=>a.start-b.start):[];
+  const prepStart=prep.length?Math.min(...prep.map(x=>x.start)):null;
+  return {start:palette?.start??pret?.start??prepStart??e.start,palette,pret,prep};
 }
 function postSequenceDetail(e,d,seq=postSequence(e)){
   if(!seq)return '';
   const base=d*1440,parts=[];
   if(seq.palette)parts.push(`Palettes ${time(seq.palette.start-base)}–${time(seq.palette.end-base)}`);
   if(seq.pret)parts.push(`Prêt ${time(seq.pret.start-base)}–${time(seq.pret.end-base)}`);
+  if(seq.prep?.length){
+    const labels=[...new Set(seq.prep.map(x=>x.title))].join(' / ');
+    const start=Math.min(...seq.prep.map(x=>x.start)),end=Math.max(...seq.prep.map(x=>x.end));
+    parts.push(`Préparation ${labels} ${time(start-base)}–${time(end-base)}`);
+  }
   parts.push(`Poste ${esc(e.post)} ${time(e.start-base)}–${time(e.end-base)}`);
-  return `<div class="meta"><strong>Début : ${time(seq.start-base)}${seq.palette?' (Palettes)':''}</strong><br>${parts.join(' · ')}</div>`;
+  const why=seq.palette?' (Palettes)':seq.prep?.length?' (préparation)':'';
+  return `<div class="meta"><strong>Début : ${time(seq.start-base)}${why}</strong><br>${parts.join(' · ')}</div>`;
 }
 function findItems(){const q=norm(query);if(mode==='people')return data.people.filter(p=>query.trim().split(/\s+/).every(t=>norm(`${p.grade} ${p.name} ${p.section}`).includes(norm(t)))).sort((a,b)=>a.name.localeCompare(b.name,'fr'));if(mode==='posts')return data.posts.filter(p=>norm(`poste ${p.id}`).includes(q)).sort((a,b)=>Number(a.id)-Number(b.id));return vehicles.filter(v=>norm(`${v.id} ${v.type} ${v.label||''}`).includes(q));}
 function personRow(p,active=false){return `<button class="result ${active?'active':''}" data-person="${p.id}" ${active?'aria-current="true"':''}><span class="avatar">${esc(initials(p))}</span><span class="result-text"><strong>${esc(p.name)}</strong><small>${esc(p.grade)} · ${esc(p.section)}${p.vehicle?' · '+esc(p.vehicle)+(p.vehicleRole?' · '+esc(p.vehicleRole):''):''}</small></span><span class="chev" aria-hidden="true">›</span></button>`;}
