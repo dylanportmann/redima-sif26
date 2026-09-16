@@ -29,6 +29,29 @@ function resolvePlanning(events, changes = {}) {
       e.people = e.people.map(id => id === '134' ? '108' : id);
     }
   }
+  // Jeudi 17.09 : Sauterel Raphaël (105) prend la place de Megert Rino (104) au poste 42.
+  for (const e of base) {
+    if (e.start === 3720 && e.end === 3750 && e.title === 'Palettes' && e.people.includes('104')) {
+      e.people = e.people.map(id => id === '104' ? '105' : id);
+    }
+    if (e.start === 3750 && e.end === 3780 && e.title === 'Prêt' && e.people.includes('104')) {
+      e.people = e.people.map(id => id === '104' ? '105' : id);
+    }
+    if (e.post === '42' && e.start === 3780 && e.end === 3870 && e.people.includes('104')) {
+      e.people = e.people.map(id => id === '104' ? '105' : id);
+    }
+  }
+  // Megert Rino (104) passe au poste 10 avec toute la séquence de préparation.
+  base.push({id:'manual-post10-104-palettes', title:'Palettes',
+    start:3690, end:3720, people:['104'], post:null,
+    source:'Modification demandée - poste 10', exact:true, override:true});
+  base.push({id:'manual-post10-104-pret', title:'Prêt',
+    start:3720, end:3750, people:['104'], post:null,
+    source:'Modification demandée - poste 10', exact:true, override:true});
+  base.push({id:'manual-post10-104-poste', title:'POSTE 10',
+    start:3750, end:3840, people:['104'], post:'10',
+    source:'Modification demandée - poste 10', exact:true, override:true});
+
   // Replace existing early-release timings for the explicitly named people.
   for (const e of base) if (planningPriority(e) === 3) e.people = e.people.filter(id => !releaseIds.includes(id));
   if (releaseIds.length) base.push({id:'manual-release', title:'Licenciement anticipé',
