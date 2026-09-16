@@ -3,23 +3,26 @@ const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>
 const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 const weekdays=['Mardi','Mercredi','Jeudi','Vendredi'];
 const POST_MAP_CENTERS={
-  '10':[2613403.70,1179152.89,14.2],
-  '11':[2613394.39,1179172.19,14.2],
-  '14':[2613242.45,1179487.47,14.2],
-  '20':[2613240.44,1179509.27,14.2],
-  '32':[2613429.34,1179463.97,14.2],
-  '33':[2613410.52,1179457.09,14.2],
-  '34':[2613483.14,1179439.17,14.2],
-  '35':[2613360.84,1179244.11,14.2],
-  '36':[2613378.76,1179207.40,14.2],
-  '40':[2613267.67,1179042.67,12.8],
-  '42':[2613415.08,1179266.21,14.2],
-  '43':[2613418.26,1179260.86,14.2],
-  '45':[2613484.85,1179281.93,14.2],
-  '46':[2613382.44,1179199.61,14.2]
+  '10':[2613403.70,1179152.89,13],
+  '11':[2613394.39,1179172.19,13],
+  '14':[2613242.45,1179487.47,13],
+  // Poste 20 : centre entre le début et la fin du parcours pour garder les deux repères visibles.
+  '20':[2613317.04,1179396.89,12.5],
+  // Poste 32 : emplacement officiel demandé, Halle L.
+  '32':[2613161.99,1178446.16,13],
+  '33':[2613410.52,1179457.09,13],
+  '34':[2613483.14,1179439.17,13],
+  '35':[2613360.84,1179244.11,13],
+  '36':[2613378.76,1179207.40,13],
+  // Poste 40 : centre entre les deux parties du poste.
+  '40':[2613267.67,1179042.67,12.5],
+  '42':[2613415.08,1179266.21,13],
+  '43':[2613418.26,1179260.86,13],
+  '45':[2613484.85,1179281.93,13],
+  '46':[2613382.44,1179199.61,13]
 };
 const REDIMA_KML='https://public.geo.admin.ch/api/kml/files/SReCDBZxTTmpzsji2j5nBA';
-function postMapUrl(id){const key=String(id),m=POST_MAP_CENTERS[key];if(!m)return 'https://s.geo.admin.ch/9mmk3e9qtom8';if(key==='32')return 'https://map.geo.admin.ch/#/map?lang=fr&center=2613295.67,1178955.07&z=10.5&bgLayer=ch.swisstopo.swissimage&topic=ech&layers=KML%7C'+REDIMA_KML+'&crosshair=marker,2613161.99,1178446.16&featureInfo=default';return 'https://map.geo.admin.ch/#/map?lang=fr&center='+m[0]+','+m[1]+'&z='+m[2]+'&bgLayer=ch.swisstopo.swissimage&topic=ech&layers=KML%7C'+REDIMA_KML+'&featureInfo=default';}
+function postMapUrl(id){const key=String(id),m=POST_MAP_CENTERS[key];if(!m)return 'https://s.geo.admin.ch/9mmk3e9qtom8';if(key==='32')return 'https://map.geo.admin.ch/#/map?lang=fr&center='+m[0]+','+m[1]+'&z='+m[2]+'&bgLayer=ch.swisstopo.swissimage&topic=ech&layers=KML%7C'+REDIMA_KML+'&crosshair=marker,'+m[0]+','+m[1]+'&featureInfo=default';return 'https://map.geo.admin.ch/#/map?lang=fr&center='+m[0]+','+m[1]+'&z='+m[2]+'&bgLayer=ch.swisstopo.swissimage&topic=ech&layers=KML%7C'+REDIMA_KML+'&featureInfo=default';}
 let data,mode='people',selected='95',day='all',query='',kind='all';
 let vehicles=[];
 const person=id=>data.people.find(p=>p.id===id);
