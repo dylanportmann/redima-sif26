@@ -11,6 +11,15 @@ function resolvePlanning(events, changes = {}) {
   const releaseIds = changes.earlyRelease?.people || [];
   const base = events.map(e => ({...e, people: [...e.people]}));
 
+  // Mercredi 16.09 : le souper de compagnie se termine à 23:30, puis ABV à 23:45.
+  const companyDinner = base.find(e => e.title === 'Souper de compagnie' && e.start === 2610);
+  if (companyDinner) {
+    companyDinner.end = 2850;
+    base.push({id:'manual-abv-wed', title:'ABV',
+      start:2865, end:2880, people:[...companyDinner.people], post:null,
+      source:'Modification demandée', exact:true});
+  }
+
   // Garde du soir 22:00-06:00 pour les nuits mercredi->jeudi et jeudi->vendredi.
   const guardPeople=['108','124','114','145','146','147','150','152','151'];
   base.push({id:'manual-guard-wed-thu', title:'GARDE',
