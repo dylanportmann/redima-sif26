@@ -61,6 +61,25 @@ function resolvePlanning(events, changes = {}) {
     start:3750, end:3840, people:['104'], post:'10',
     source:'Modification demandée - poste 10', exact:true, override:true});
 
+  // Vendredi 18.09 : Bovey Arthur (98) quitte le poste 14 et passe au poste 20.
+  base.push({id:'manual-post20-98', title:'POSTE 20',
+    start:4800, end:5040, people:['98'], post:'20',
+    source:'Modification demandée - poste 20', exact:true, override:true});
+
+  // Jeandin Louis (103) reprend toute la séquence de Bovey au poste 14.
+  base.push({id:'manual-post14-103-palettes', title:'Palettes',
+    start:4830, end:4860, people:['103'], post:null,
+    source:'Modification demandée - poste 14', exact:true, override:true});
+  base.push({id:'manual-post14-103-pret', title:'Prêt',
+    start:4860, end:4890, people:['103'], post:null,
+    source:'Modification demandée - poste 14', exact:true, override:true});
+  base.push({id:'manual-post14-103-poste', title:'POSTE 14',
+    start:4890, end:4980, people:['103'], post:'14',
+    source:'Modification demandée - poste 14', exact:true, override:true});
+  base.push({id:'manual-post14-103-dispo', title:'A dispo sgtm chef log',
+    start:4980, end:5040, people:['103'], post:null,
+    source:'Modification demandée - poste 14', exact:true, override:true});
+
   // Replace existing early-release timings for the explicitly named people.
   for (const e of base) if (planningPriority(e) === 3) e.people = e.people.filter(id => !releaseIds.includes(id));
   if (releaseIds.length) base.push({id:'manual-release', title:'Licenciement anticipé',
